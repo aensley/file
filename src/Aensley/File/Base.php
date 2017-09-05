@@ -82,7 +82,8 @@ class Base
 	 *
 	 * @param string         $source The absolute path of the source to move.
 	 * @param string         $target The absolute path to move the source to.
-	 * @param bool[optional] $rename Set to true to automatically rename the target to avoid overwriting an existing file/directory.
+	 * @param bool[optional] $rename Set to true to automatically rename the target
+	 *                               to avoid overwriting an existing file/directory.
 	 *
 	 * @return string The absolute path to where the file was moved on success. Empty string on failure.
 	 */
@@ -94,12 +95,11 @@ class Base
 		}
 
 		$extension = '';
+		$targetFile = self::baseName($target);
 		if (is_file($source) && $rename) {
 			$extension = File::extension($target);
 			// Keep file name short enough to allow for up to 9,999 of the same file name without collision.
 			$targetFile = substr(File::name($target), 0, (255 - (strlen($extension) + 6)));
-		} else {
-			$targetFile = self::baseName($target);
 		}
 
 		$targetDirectory = self::directoryName($target) . DIRECTORY_SEPARATOR;

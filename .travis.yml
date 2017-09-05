@@ -4,6 +4,7 @@ php:
   - 5.6
   - 7.0
   - 7.1
+  - hhvm
 
 install: composer install --no-interaction
 
@@ -16,10 +17,3 @@ script: phpunit
 after_success:
   # CodeClimate.com
   - vendor/bin/test-reporter
-  # Codecov.io
-  - bash <(curl -s https://codecov.io/bash)
-  # Codacy.com
-  - vendor/bin/codacycoverage clover build/logs/clover.xml
-  # Coveralls.io
-  - php vendor/bin/phpcov.php merge --clover build/logs/clover.xml build/cov
-  - travis_retry php vendor/bin/coveralls -v

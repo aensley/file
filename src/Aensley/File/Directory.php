@@ -48,11 +48,13 @@ class Directory extends Base
 							// Couldn't delete a subdirectory.
 							return false;
 						}
-					} else {
-						if (!File::delete($file)) {
-							// Couldn't delete a file inside the directory.
-							return false;
-						}
+
+						continue;
+					}
+
+					if (!File::delete($file)) {
+						// Couldn't delete a file inside the directory.
+						return false;
 					}
 				}
 
