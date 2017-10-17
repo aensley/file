@@ -2,7 +2,7 @@
 	"name": "aensley/file",
 	"type": "library",
 	"license": "MIT",
-	"homepage": "https://github.com/aensley/media-organizer/",
+	"homepage": "https://github.com/aensley/file/",
 	"description": "A basic file/directory library.",
 	"keywords": ["file", "directory"],
 	"authors": [
