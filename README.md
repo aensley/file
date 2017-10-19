@@ -6,10 +6,9 @@ A basic file/directory library.
 [![Latest Stable Version](https://poser.pugx.org/aensley/file/v/stable)](https://packagist.org/packages/aensley/file)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/aensley/file.svg)](https://packagist.org/packages/aensley/file)
 [![Build Status](https://travis-ci.org/aensley/file.svg)](https://travis-ci.org/aensley/file)
-[![Tested Versions Status](https://php-eye.com/badge/aensley/file/tested.svg?branch=dev-master)](https://php-eye.com/package/aensley/file)
-
 [![GitHub Issues](https://img.shields.io/github/issues-raw/aensley/file.svg)](https://github.com/aensley/file/issues)
-[![Dependency Status](https://www.versioneye.com/php/aensley:file/dev-master/badge)](https://www.versioneye.com/php/aensley:file)
+
+[![Tested Versions Status](https://php-eye.com/badge/aensley/file/tested.svg?branch=dev-master)](https://php-eye.com/package/aensley/file)
 [![Code Climate Grade](https://codeclimate.com/github/aensley/file/badges/gpa.svg)](https://codeclimate.com/github/aensley/file)
 [![Code Climate Issues](https://img.shields.io/codeclimate/issues/github/aensley/file.svg)](https://codeclimate.com/github/aensley/file/issues)
 [![Code Climate Test Coverage](https://codeclimate.com/github/aensley/file/badges/coverage.svg)](https://codeclimate.com/github/aensley/file/coverage)
