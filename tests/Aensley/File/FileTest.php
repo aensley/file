@@ -15,7 +15,7 @@ class FileTest extends TestCase
 	private $newFile;
 
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->file = new File();
 		$this->directoryName = dirname(realpath(__FILE__));
@@ -64,7 +64,7 @@ class FileTest extends TestCase
 	{
 		touch($this->fileName);
 		$this->assertTrue(File::delete($this->fileName));
-		$this->assertFileNotExists($this->fileName);
+		$this->assertFileDoesNotExist($this->fileName);
 		$this->assertFalse(File::delete($this->nonExistentFile));
 		touch($this->fileName);
 	}

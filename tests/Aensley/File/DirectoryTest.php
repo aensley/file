@@ -13,7 +13,7 @@ class DirectoryTest extends TestCase
 	private $nonExistentDirectory;
 
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->directory = new Directory();
 		$this->directoryName = dirname(realpath(__FILE__));
@@ -23,7 +23,7 @@ class DirectoryTest extends TestCase
 	}
 
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		Directory::delete($this->newDirectory);
 	}
