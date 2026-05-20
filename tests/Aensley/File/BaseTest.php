@@ -14,7 +14,7 @@ class BaseTest extends TestCase
 	private $newFile;
 
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		$this->base = new Base();
 		$this->directoryName = dirname(realpath(__FILE__));
@@ -26,7 +26,7 @@ class BaseTest extends TestCase
 	}
 
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		@unlink($this->newFile);
 		for ($i = 0; $i < 20; $i++) {
