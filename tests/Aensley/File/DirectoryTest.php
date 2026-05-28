@@ -68,6 +68,15 @@ class DirectoryTest extends TestCase
 	}
 
 
+	public function testDeleteWithNestedSubdirectory()
+	{
+		mkdir($this->newDirectory . 'subdir', 0755, true);
+		touch($this->newDirectory . 'subdir' . DIRECTORY_SEPARATOR . 'file.txt');
+		$this->assertTrue(Directory::delete($this->newDirectory));
+		$this->assertFalse(Directory::exists($this->newDirectory));
+	}
+
+
 	public function testListFiles()
 	{
 		@Directory::create($this->newDirectory);
@@ -89,5 +98,33 @@ class DirectoryTest extends TestCase
 		$this->assertEquals($files, array(
 			$this->newDirectory . 'somefile.txt',
 		));
+	}
+
+
+	public function testListFilesWithSymlinkAndRecursion()
+	{
+		Directory::create($this->newDirectory);
+		touch($this->newDirectory . 'somefile.txt');
+
+		// Symlink — listFiles should skip it (covers Directory.php line 130)
+		$symlinkTarget = $this->directoryName . DIRECTORY_SEPARATOR . 'symlink_target.txt';
+		touch($symlinkTarget);
+		symlink($symlinkTarget, $this->newDirectory . 'alink');
+
+		// Subdirectory with a file — recursive listing covers Directory.php lines 134, 136, 140
+		mkdir($this->newDirectory . 'subdir', 0755, true);
+		touch($this->newDirectory . 'subdir' . DIRECTORY_SEPARATOR . 'nested.txt');
+
+		$files = Directory::listFiles($this->newDirectory, true);
+		$this->assertContains($this->newDirectory . 'somefile.txt', $files);
+		$this->assertContains($this->newDirectory . 'subdir' . DIRECTORY_SEPARATOR . 'nested.txt', $files);
+		$this->assertNotContains($this->newDirectory . 'alink', $files);
+
+		// Non-recursive — subdir files should not appear
+		$files = Directory::listFiles($this->newDirectory);
+		$this->assertContains($this->newDirectory . 'somefile.txt', $files);
+		$this->assertNotContains($this->newDirectory . 'subdir' . DIRECTORY_SEPARATOR . 'nested.txt', $files);
+
+		@unlink($symlinkTarget);
 	}
 }

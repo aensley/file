@@ -86,4 +86,11 @@ class BaseTest extends TestCase
 			$this->assertFileExists($file);
 		}
 	}
+
+
+	public function testMoveFailures()
+	{
+		$this->assertEquals('', Base::move($this->nonExistentFile, $this->newFile));
+		$this->assertEquals('', Base::move($this->fileName, ''));
+	}
 }

@@ -2,3 +2,5 @@
 /build
 /coverage
 /vendor
+/tests/Aensley/File/new_directory/
+/tests/Aensley/File/test.txt

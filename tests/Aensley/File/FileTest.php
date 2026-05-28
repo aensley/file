@@ -49,6 +49,8 @@ class FileTest extends TestCase
 	public function testExifDateTime()
 	{
 		$this->assertEquals('2016-07-05 09:54:55', File::exifDateTime($this->exifFile, 'Y-m-d H:i:s'));
+		// Plain text file has no EXIF data — covers File.php line 67
+		$this->assertEquals('', File::exifDateTime($this->fileName));
 	}
 
 

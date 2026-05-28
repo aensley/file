@@ -3,9 +3,10 @@
 [![Version](https://img.shields.io/packagist/v/aensley/file.svg?logo=packagist&logoColor=fff)][packagist]
 [![License](https://img.shields.io/github/license/aensley/file.svg)](https://github.com/aensley/file/blob/master/LICENSE)
 [![Downloads](https://img.shields.io/packagist/dt/aensley/file.svg?logo=packagist&logoColor=fff)][packagist]
-[![Tests](https://github.com/aensley/file/actions/workflows/test.yml/badge.svg)](https://travis-ci.org/aensley/file)
+[![Tests](https://github.com/aensley/file/actions/workflows/test.yml/badge.svg)](https://github.com/aensley/file/actions/workflows/test.yml)<br>
 [![Maintainability](https://qlty.sh/gh/aensley/projects/file/maintainability.svg)][qltysh]
 [![Code Coverage](https://qlty.sh/gh/aensley/projects/file/coverage.svg)][qltysh]
+[![Socket](https://badge.socket.dev/composer/package/aensley/file)](https://socket.dev/composer/package/aensley/file)
 
 A basic file/directory library.
 
@@ -34,7 +35,7 @@ composer require aensley/file
 
 require '/path/to/composer/autoload.php';
 
-use use \Aensley\File\Directory;
+use \Aensley\File\Directory;
 
 // Recursively delete a directory.
 Directory::delete('/some/dir/');
