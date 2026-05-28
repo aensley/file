@@ -6,6 +6,7 @@
 [![Tests](https://github.com/aensley/file/actions/workflows/test.yml/badge.svg)](https://travis-ci.org/aensley/file)
 [![Maintainability](https://qlty.sh/gh/aensley/projects/file/maintainability.svg)][qltysh]
 [![Code Coverage](https://qlty.sh/gh/aensley/projects/file/coverage.svg)][qltysh]
+[![Socket](https://badge.socket.dev/composer/package/aensley/file)](https://socket.dev/composer/package/aensley/file)
 
 A basic file/directory library.
 
