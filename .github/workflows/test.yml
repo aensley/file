@@ -2,13 +2,16 @@ name: test
 
 on: push
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [ 8.5 ]
+        php-version: [ 8.2, 8.5 ]
     steps:
       - uses: actions/checkout@v6
         with:
@@ -21,10 +24,11 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction
       - name: Lint
-        run: ./vendor/bin/phpcs
+        run: composer lint
       - name: Test
-        run: ./vendor/bin/phpunit --coverage-clover coverage/clover.xml
+        run: composer test
       - name: Report Coverage
+        if: ${{ matrix.php-version == 8.5 }}
         uses: qltysh/qlty-action/coverage@v2
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}

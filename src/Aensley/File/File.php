@@ -46,21 +46,21 @@ class File extends Base
      */
     public static function exifDateTime($file, $format = 'Y-m-d H:i:s')
     {
-        if (function_exists('exif_read_data')) {
-            static::exists($file);
-            $exif = @exif_read_data($file, 'EXIF');
-            // Fields in which to find the date, in order of preference.
-            $exifFields = array('DateTime', 'DateTimeOriginal', 'DateTimeDigitized');
-            if (!empty($exif)) {
-                foreach ($exifFields as $exifField) {
-                    if (!empty($exif[$exifField])) {
-                        $date = trim($exif[$exifField]);
-                        if (preg_match('/^\d{4}\:\d{2}\:\d{2} \d{2}\:\d{2}\:\d{2}$/', $date)) {
-                            $date = \DateTime::createFromFormat('Y:m:d H:i:s', $date);
-                            return $date->format($format);
-                        }
-                    }
-                }
+        $exif = function_exists('exif_read_data') ? @exif_read_data($file, 'EXIF') : [];
+        if (empty($exif)) {
+            return '';
+        }
+
+        // Fields in which to find the date, in order of preference.
+        $exifFields = ['DateTime', 'DateTimeOriginal', 'DateTimeDigitized'];
+        foreach ($exifFields as $exifField) {
+            if (empty($exif[$exifField])) {
+                continue;
+            }
+
+            $date = trim($exif[$exifField]);
+            if (preg_match('/^\d{4}\:\d{2}\:\d{2} \d{2}\:\d{2}\:\d{2}$/', $date)) {
+                return \DateTime::createFromFormat('Y:m:d H:i:s', $date)->format($format);
             }
         }
 
@@ -96,7 +96,11 @@ class File extends Base
      */
     public static function delete($file)
     {
-        return (self::isWritable($file) && unlink($file));
+        if (is_link($file)) {
+            return unlink($file);
+        }
+
+        return self::isWritable($file) && unlink($file);
     }
 
 
@@ -109,7 +113,7 @@ class File extends Base
      */
     public static function exists($file)
     {
-        return (parent::exists($file) && is_file($file));
+        return parent::exists($file) && is_file($file);
     }
 
 
@@ -122,7 +126,7 @@ class File extends Base
      */
     public static function isReadable($file)
     {
-        return (parent::isReadable($file) && is_file($file));
+        return parent::isReadable($file) && is_file($file);
     }
 
 
@@ -135,6 +139,6 @@ class File extends Base
      */
     public static function isWritable($file)
     {
-        return (parent::isWritable($file) && is_file($file));
+        return parent::isWritable($file) && is_file($file);
     }
 }

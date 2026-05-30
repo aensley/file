@@ -1,6 +1,7 @@
 .phpunit.result.cache
-/build
-/coverage
-/vendor
+/build/
+/coverage/
+/node_modules/
+/vendor/
 /tests/Aensley/File/new_directory/
 /tests/Aensley/File/test.txt

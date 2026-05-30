@@ -45,7 +45,7 @@ class Base
      */
     public static function exists($path)
     {
-        return (!empty($path) && file_exists($path));
+        return !empty($path) && file_exists($path);
     }
 
 
@@ -58,7 +58,7 @@ class Base
      */
     public static function isReadable($path)
     {
-        return (self::exists($path) && is_readable($path));
+        return self::exists($path) && is_readable($path);
     }
 
 
@@ -71,7 +71,7 @@ class Base
      */
     public static function isWritable($path)
     {
-        return (self::exists($path) && is_writable($path));
+        return self::exists($path) && is_writable($path);
     }
 
 
@@ -92,6 +92,23 @@ class Base
             return '';
         }
 
+        $target = self::resolveTarget($source, $target, $rename);
+        return (!empty($target) && rename($source, $target)) ? $target : '';
+    }
+
+
+    /**
+     * Resolves the final target path for a move operation, creating the target directory
+     * if needed and finding an available name when $rename is true.
+     *
+     * @param string $source The absolute path of the source to move.
+     * @param string $target The desired absolute target path.
+     * @param bool   $rename Whether to auto-rename to avoid overwriting an existing path.
+     *
+     * @return string The resolved target path, or empty string on failure.
+     */
+    private static function resolveTarget($source, $target, $rename)
+    {
         $extension = '';
         $targetFile = self::baseName($target);
         if (is_file($source) && $rename) {
@@ -100,17 +117,18 @@ class Base
             $targetFile = substr(File::name($target), 0, (255 - (strlen($extension) + 6)));
         }
 
+        $suffix = $extension !== '' ? '.' . $extension : '';
         $targetDirectory = self::directoryName($target) . DIRECTORY_SEPARATOR;
         if (!Directory::isWritable($targetDirectory) && !Directory::create($targetDirectory)) {
             //  Target directory does not exist or is unwritable.
             return '';
         }
 
-        $target = $targetDirectory . $targetFile . ($extension ? '.' . $extension : '');
+        $target = $targetDirectory . $targetFile . $suffix;
         if ($rename && self::exists($target)) {
             $counter = 0;
             do {
-                $target = $targetDirectory . $targetFile . '_' . $counter++ . ($extension ? '.' . $extension : '');
+                $target = $targetDirectory . $targetFile . '_' . $counter++ . $suffix;
             } while (self::exists($target) && $counter < 10000);
 
             if (self::exists($target)) {
@@ -119,11 +137,6 @@ class Base
             }
         }
 
-        if (rename($source, $target)) {
-            return $target;
-        }
-
-        // Could not move $source to $target
-        return '';
+        return $target;
     }
 }

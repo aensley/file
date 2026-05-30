@@ -1,37 +1,42 @@
 {
-	"name": "aensley/file",
-	"type": "library",
-	"license": "MIT",
-	"homepage": "https://github.com/aensley/file/",
-	"description": "A basic file/directory library.",
-	"keywords": ["file", "directory"],
-	"authors": [
-		{
-			"name": "Andrew Ensley",
-			"homepage": "https://andrewensley.com"
-		}
-	],
-	"support": {
+  "name": "aensley/file",
+  "type": "library",
+  "license": "MIT",
+  "homepage": "https://github.com/aensley/file",
+  "description": "A basic file/directory library.",
+  "keywords": ["file", "directory"],
+  "authors": [
+    {
+      "name": "Andrew Ensley",
+      "homepage": "https://andrewensley.com"
+    }
+  ],
+  "support": {
         "issues": "https://github.com/aensley/file/issues"
     },
-	"funding": [
-        {
-            "type": "github",
-            "url": "https://github.com/sponsors/aensley"
-        },
-        {
-            "type": "paypal",
-            "url": "https://paypal.me/AndrewEnsley"
-        }
-    ],
-	"autoload": {
-		"psr-4": { "Aensley\\": "src/Aensley" }
-	},
-	"require": {
-		"php": ">=7.0.0"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "^13.1",
-		"squizlabs/php_codesniffer": "^4.0"
-	}
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/aensley"
+    },
+    {
+      "type": "paypal",
+      "url": "https://paypal.me/AndrewEnsley"
+    }
+  ],
+  "autoload": {
+    "psr-4": { "Aensley\\": "src/Aensley" }
+  },
+  "scripts": {
+    "lint": "./vendor/bin/phpcs",
+    "lint:fix": "./vendor/bin/phpcbf",
+    "test": "./vendor/bin/phpunit --coverage-clover coverage/clover.xml"
+  },
+  "require": {
+    "php": ">=7.1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^13.1",
+    "squizlabs/php_codesniffer": "^4.0"
+  }
 }
