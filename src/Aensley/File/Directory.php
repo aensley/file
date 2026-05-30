@@ -20,7 +20,7 @@ class Directory extends Base
      */
     public static function create($directory, $umask = 0755)
     {
-        return (!empty($directory) && mkdir($directory, $umask, true));
+        return !empty($directory) && mkdir($directory, $umask, true);
     }
 
 
@@ -33,39 +33,52 @@ class Directory extends Base
      */
     public static function delete($directory)
     {
-        $directory = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        if (self::exists($directory)) {
-            if (self::isWritable($directory)) {
-                // Skip virtual paths.
-                $files = array_diff(scandir($directory), array('.', '..'));
-                foreach ($files as $file) {
-                    $file = $directory . $file;
-                    if (is_dir($file)) {
-                        // Recursion
-                        if (!self::delete($file)) {
-                            // Couldn't delete a subdirectory.
-                            return false;
-                        }
-
-                        continue;
-                    }
-
-                    if (!File::delete($file)) {
-                        // Couldn't delete a file inside the directory.
-                        return false;
-                    }
-                }
-
-                // Directory is empty
-                return rmdir($directory);
-            }
-
-            // Directory is not writable. Won't be able to delete.
-            return false;
+        $directory = rtrim($directory, DIRECTORY_SEPARATOR);
+        if (is_link($directory)) {
+            return unlink($directory);
         }
 
-        // No directory to delete. Technically a success.
-        return true;
+        $directory .= DIRECTORY_SEPARATOR;
+        if (!self::exists($directory)) {
+            // No directory to delete. Technically a success.
+            return true;
+        }
+
+        // False if not writable — short-circuits rmdir at the end without entering the loop.
+        $allDeleted = self::isWritable($directory);
+        if ($allDeleted) {
+            // Skip virtual paths.
+            $files = array_diff(scandir($directory), ['.', '..']);
+            foreach ($files as $file) {
+                $allDeleted = self::deleteEntry($directory . $file);
+                if (!$allDeleted) {
+                    break;
+                }
+            }
+        }
+
+        return $allDeleted && rmdir($directory);
+    }
+
+
+    /**
+     * Deletes a single file system entry (link, directory, or file).
+     *
+     * @param string $file The absolute path to the entry to delete.
+     *
+     * @return bool True on success. False on failure.
+     */
+    private static function deleteEntry($file)
+    {
+        if (is_link($file)) {
+            return unlink($file);
+        }
+
+        if (is_dir($file)) {
+            return self::delete($file);
+        }
+
+        return File::delete($file);
     }
 
 
@@ -78,7 +91,7 @@ class Directory extends Base
      */
     public static function exists($directory)
     {
-        return (parent::exists($directory) && is_dir($directory));
+        return parent::exists($directory) && is_dir($directory);
     }
 
 
@@ -91,7 +104,7 @@ class Directory extends Base
      */
     public static function isWritable($directory)
     {
-        return (parent::isWritable($directory) && is_dir($directory));
+        return parent::isWritable($directory) && is_dir($directory);
     }
 
 
@@ -104,7 +117,7 @@ class Directory extends Base
      */
     public static function isReadable($path)
     {
-        return (parent::isReadable($path) && is_dir($path));
+        return parent::isReadable($path) && is_dir($path);
     }
 
 
@@ -117,41 +130,37 @@ class Directory extends Base
      *
      * @return array The absolute paths of files contained within the directory.
      */
-    public static function listFiles($directory, $recursive = false, $validExtensions = array())
+    public static function listFiles($directory, $recursive = false, $validExtensions = [])
     {
-        $returnFiles = array();
+        $returnFiles = [];
         $directory = rtrim($directory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        if (self::exists($directory)) {
-            $files = array_diff(scandir($directory), array('.', '..'));
-            foreach ($files as $file) {
-                $file = $directory . $file;
-                if (is_link($file)) {
-                    // Do not follow links.
-                    continue;
-                } elseif (is_dir($file)) {
-                    if ($recursive) {
-                        // Recursion.
-                        $dirFiles = self::listFiles($file, $recursive, $validExtensions);
-                        // Add files found in sub-directory.
-                        $returnFiles = array_merge($returnFiles, $dirFiles);
-                    }
-
-                    // Do not add directories.
-                    continue;
-                }
-
-                // We know it's a regular file at this point.
-                if (!empty($validExtensions) && !in_array(File::extension($file), $validExtensions)) {
-                    // Invalid file extension.
-                    continue;
-                }
-
-                // Passed all the exclusion tests. Add it to the list.
-                $returnFiles[] = $file;
-            }
+        if (!self::exists($directory)) {
+            return $returnFiles;
         }
 
-        // Return what we found.
+        $files = array_diff(scandir($directory), ['.', '..']);
+        foreach ($files as $file) {
+            $file = $directory . $file;
+            if (is_link($file)) {
+                // Do not follow links.
+                continue;
+            }
+
+            if (is_dir($file)) {
+                if ($recursive) {
+                    array_push($returnFiles, ...self::listFiles($file, $recursive, $validExtensions));
+                }
+
+                continue;
+            }
+
+            if (!empty($validExtensions) && !in_array(File::extension($file), $validExtensions)) {
+                continue;
+            }
+
+            $returnFiles[] = $file;
+        }
+
         return $returnFiles;
     }
 }
