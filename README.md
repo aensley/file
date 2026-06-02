@@ -1,7 +1,7 @@
 # aensley/file
 
 [![Version](https://img.shields.io/packagist/v/aensley/file.svg?logo=packagist&logoColor=fff)][packagist]
-![PHP Version](https://img.shields.io/packagist/dependency-v/aensley/media-organizer/php)
+![PHP Version](https://img.shields.io/packagist/dependency-v/aensley/file/php?logo=php&logoColor=fff)
 [![License](https://img.shields.io/github/license/aensley/file.svg)](https://github.com/aensley/file/blob/main/LICENSE)
 [![prettier](https://img.shields.io/badge/prettier-ff69b4.svg?&logo=prettier&logoColor=fff)](https://prettier.io/)
 [![Downloads](https://img.shields.io/packagist/dt/aensley/file.svg?logo=packagist&logoColor=fff)][packagist]
